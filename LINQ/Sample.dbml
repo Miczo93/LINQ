@@ -18,5 +18,66 @@
       <Column Name="DepartmentId" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Association Name="DepartmentsLINQ_EmployeesLINQ" Member="DepartmentsLINQ" ThisKey="DepartmentId" OtherKey="ID" Type="DepartmentsLINQ" IsForeignKey="true" />
     </Type>
+    <InsertFunction FunctionId="FunctionId1">
+      <Argument Parameter="firstName" Member="FirstName" />
+      <Argument Parameter="lastName" Member="LastName" />
+      <Argument Parameter="gender" Member="Gender" />
+      <Argument Parameter="salary" Member="Salary" />
+      <Argument Parameter="departmentId" Member="DepartmentId" />
+    </InsertFunction>
+    <UpdateFunction FunctionId="FunctionId2">
+      <Argument Parameter="iD" Member="ID" />
+      <Argument Parameter="firstName" Member="FirstName" />
+      <Argument Parameter="lastName" Member="LastName" />
+      <Argument Parameter="gender" Member="Gender" />
+      <Argument Parameter="salary" Member="Salary" />
+      <Argument Parameter="departmentId" Member="DepartmentId" />
+    </UpdateFunction>
+    <DeleteFunction FunctionId="FunctionId3">
+      <Argument Parameter="iD" Member="ID" />
+    </DeleteFunction>
   </Table>
+  <Function Name="dbo.GetEmployeesLINQ" Method="GetEmployeesLINQ">
+    <ElementType Name="GetEmployeesLINQResult">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="FirstName" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="LastName" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="Gender" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="Salary" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="DepartmentId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+    </ElementType>
+  </Function>
+  <Function Id="FunctionId3" Name="dbo.DeleteEmployeeLINQ" Method="DeleteEmployeeLINQ">
+    <Parameter Name="ID" Parameter="iD" Type="System.Int32" DbType="Int" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Id="FunctionId1" Name="dbo.InsertEmployeeLINQ" Method="InsertEmployeeLINQ">
+    <Parameter Name="FirstName" Parameter="firstName" Type="System.String" DbType="NVarChar(50)" />
+    <Parameter Name="LastName" Parameter="lastName" Type="System.String" DbType="NVarChar(50)" />
+    <Parameter Name="Gender" Parameter="gender" Type="System.String" DbType="NVarChar(50)" />
+    <Parameter Name="Salary" Parameter="salary" Type="System.Int32" DbType="Int" />
+    <Parameter Name="DepartmentId" Parameter="departmentId" Type="System.Int32" DbType="Int" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Id="FunctionId2" Name="dbo.UpdateEmployeeLINQ" Method="UpdateEmployeeLINQ">
+    <Parameter Name="ID" Parameter="iD" Type="System.Int32" DbType="Int" />
+    <Parameter Name="FirstName" Parameter="firstName" Type="System.String" DbType="NVarChar(50)" />
+    <Parameter Name="LastName" Parameter="lastName" Type="System.String" DbType="NVarChar(50)" />
+    <Parameter Name="Gender" Parameter="gender" Type="System.String" DbType="NVarChar(50)" />
+    <Parameter Name="Salary" Parameter="salary" Type="System.Int32" DbType="Int" />
+    <Parameter Name="DepartmentId" Parameter="departmentId" Type="System.Int32" DbType="Int" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.GetEmployeesByDepartmentLINQ" Method="GetEmployeesByDepartmentLINQ">
+    <Parameter Name="DepartmentId" Parameter="departmentId" Type="System.Int32" DbType="Int" />
+    <Parameter Name="DepartmentName" Parameter="departmentName" Type="System.String" DbType="NVarChar(50)" Direction="InOut" />
+    <ElementType Name="GetEmployeesByDepartmentLINQResult">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="FirstName" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="LastName" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="Gender" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="Salary" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="DepartmentId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+    </ElementType>
+  </Function>
 </Database>

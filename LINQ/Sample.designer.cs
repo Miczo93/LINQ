@@ -33,9 +33,6 @@ namespace LINQ
     partial void InsertDepartmentsLINQ(DepartmentsLINQ instance);
     partial void UpdateDepartmentsLINQ(DepartmentsLINQ instance);
     partial void DeleteDepartmentsLINQ(DepartmentsLINQ instance);
-    partial void InsertEmployeesLINQ(EmployeesLINQ instance);
-    partial void UpdateEmployeesLINQ(EmployeesLINQ instance);
-    partial void DeleteEmployeesLINQ(EmployeesLINQ instance);
     #endregion
 		
 		public SampleDataContext() : 
@@ -82,6 +79,57 @@ namespace LINQ
 			{
 				return this.GetTable<EmployeesLINQ>();
 			}
+		}
+		
+		private void InsertEmployeesLINQ(EmployeesLINQ obj)
+		{
+			this.InsertEmployeeLINQ(obj.FirstName, obj.LastName, obj.Gender, ((System.Nullable<int>)(obj.Salary)), ((System.Nullable<int>)(obj.DepartmentId)));
+		}
+		
+		private void UpdateEmployeesLINQ(EmployeesLINQ obj)
+		{
+			this.UpdateEmployeeLINQ(((System.Nullable<int>)(obj.ID)), obj.FirstName, obj.LastName, obj.Gender, ((System.Nullable<int>)(obj.Salary)), ((System.Nullable<int>)(obj.DepartmentId)));
+		}
+		
+		private void DeleteEmployeesLINQ(EmployeesLINQ obj)
+		{
+			this.DeleteEmployeeLINQ(((System.Nullable<int>)(obj.ID)));
+		}
+		
+		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.GetEmployeesLINQ")]
+		public ISingleResult<GetEmployeesLINQResult> GetEmployeesLINQ()
+		{
+			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())));
+			return ((ISingleResult<GetEmployeesLINQResult>)(result.ReturnValue));
+		}
+		
+		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.DeleteEmployeeLINQ")]
+		public int DeleteEmployeeLINQ([global::System.Data.Linq.Mapping.ParameterAttribute(Name="ID", DbType="Int")] System.Nullable<int> iD)
+		{
+			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), iD);
+			return ((int)(result.ReturnValue));
+		}
+		
+		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.InsertEmployeeLINQ")]
+		public int InsertEmployeeLINQ([global::System.Data.Linq.Mapping.ParameterAttribute(Name="FirstName", DbType="NVarChar(50)")] string firstName, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="LastName", DbType="NVarChar(50)")] string lastName, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Gender", DbType="NVarChar(50)")] string gender, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Salary", DbType="Int")] System.Nullable<int> salary, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="DepartmentId", DbType="Int")] System.Nullable<int> departmentId)
+		{
+			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), firstName, lastName, gender, salary, departmentId);
+			return ((int)(result.ReturnValue));
+		}
+		
+		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.UpdateEmployeeLINQ")]
+		public int UpdateEmployeeLINQ([global::System.Data.Linq.Mapping.ParameterAttribute(Name="ID", DbType="Int")] System.Nullable<int> iD, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="FirstName", DbType="NVarChar(50)")] string firstName, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="LastName", DbType="NVarChar(50)")] string lastName, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Gender", DbType="NVarChar(50)")] string gender, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Salary", DbType="Int")] System.Nullable<int> salary, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="DepartmentId", DbType="Int")] System.Nullable<int> departmentId)
+		{
+			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), iD, firstName, lastName, gender, salary, departmentId);
+			return ((int)(result.ReturnValue));
+		}
+		
+		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.GetEmployeesByDepartmentLINQ")]
+		public ISingleResult<GetEmployeesByDepartmentLINQResult> GetEmployeesByDepartmentLINQ([global::System.Data.Linq.Mapping.ParameterAttribute(Name="DepartmentId", DbType="Int")] System.Nullable<int> departmentId, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="DepartmentName", DbType="NVarChar(50)")] ref string departmentName)
+		{
+			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), departmentId, departmentName);
+			departmentName = ((string)(result.GetParameterValue(1)));
+			return ((ISingleResult<GetEmployeesByDepartmentLINQResult>)(result.ReturnValue));
 		}
 	}
 	
@@ -442,6 +490,238 @@ namespace LINQ
 			if ((this.PropertyChanged != null))
 			{
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	public partial class GetEmployeesLINQResult
+	{
+		
+		private int _ID;
+		
+		private string _FirstName;
+		
+		private string _LastName;
+		
+		private string _Gender;
+		
+		private System.Nullable<int> _Salary;
+		
+		private System.Nullable<int> _DepartmentId;
+		
+		public GetEmployeesLINQResult()
+		{
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", DbType="Int NOT NULL")]
+		public int ID
+		{
+			get
+			{
+				return this._ID;
+			}
+			set
+			{
+				if ((this._ID != value))
+				{
+					this._ID = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FirstName", DbType="NVarChar(50)")]
+		public string FirstName
+		{
+			get
+			{
+				return this._FirstName;
+			}
+			set
+			{
+				if ((this._FirstName != value))
+				{
+					this._FirstName = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_LastName", DbType="NVarChar(50)")]
+		public string LastName
+		{
+			get
+			{
+				return this._LastName;
+			}
+			set
+			{
+				if ((this._LastName != value))
+				{
+					this._LastName = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Gender", DbType="NVarChar(50)")]
+		public string Gender
+		{
+			get
+			{
+				return this._Gender;
+			}
+			set
+			{
+				if ((this._Gender != value))
+				{
+					this._Gender = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Salary", DbType="Int")]
+		public System.Nullable<int> Salary
+		{
+			get
+			{
+				return this._Salary;
+			}
+			set
+			{
+				if ((this._Salary != value))
+				{
+					this._Salary = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DepartmentId", DbType="Int")]
+		public System.Nullable<int> DepartmentId
+		{
+			get
+			{
+				return this._DepartmentId;
+			}
+			set
+			{
+				if ((this._DepartmentId != value))
+				{
+					this._DepartmentId = value;
+				}
+			}
+		}
+	}
+	
+	public partial class GetEmployeesByDepartmentLINQResult
+	{
+		
+		private int _ID;
+		
+		private string _FirstName;
+		
+		private string _LastName;
+		
+		private string _Gender;
+		
+		private System.Nullable<int> _Salary;
+		
+		private System.Nullable<int> _DepartmentId;
+		
+		public GetEmployeesByDepartmentLINQResult()
+		{
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", DbType="Int NOT NULL")]
+		public int ID
+		{
+			get
+			{
+				return this._ID;
+			}
+			set
+			{
+				if ((this._ID != value))
+				{
+					this._ID = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FirstName", DbType="NVarChar(50)")]
+		public string FirstName
+		{
+			get
+			{
+				return this._FirstName;
+			}
+			set
+			{
+				if ((this._FirstName != value))
+				{
+					this._FirstName = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_LastName", DbType="NVarChar(50)")]
+		public string LastName
+		{
+			get
+			{
+				return this._LastName;
+			}
+			set
+			{
+				if ((this._LastName != value))
+				{
+					this._LastName = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Gender", DbType="NVarChar(50)")]
+		public string Gender
+		{
+			get
+			{
+				return this._Gender;
+			}
+			set
+			{
+				if ((this._Gender != value))
+				{
+					this._Gender = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Salary", DbType="Int")]
+		public System.Nullable<int> Salary
+		{
+			get
+			{
+				return this._Salary;
+			}
+			set
+			{
+				if ((this._Salary != value))
+				{
+					this._Salary = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DepartmentId", DbType="Int")]
+		public System.Nullable<int> DepartmentId
+		{
+			get
+			{
+				return this._DepartmentId;
+			}
+			set
+			{
+				if ((this._DepartmentId != value))
+				{
+					this._DepartmentId = value;
+				}
 			}
 		}
 	}
