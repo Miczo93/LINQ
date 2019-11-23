@@ -49,6 +49,32 @@
             <SortedDescendingCellStyle BackColor="#F1E5CE" />
             <SortedDescendingHeaderStyle BackColor="#93451F" />
         </asp:GridView>
+        <div style="font-family: Arial">
+<asp:RadioButtonList ID="RadioButtonList1" runat="server" AutoPostBack="True"
+    onselectedindexchanged="RadioButtonList1_SelectedIndexChanged">
+    <asp:ListItem Text="Load all Employees (common)" Value="Common"></asp:ListItem>
+        <asp:ListItem Text="Load all Employees (all info)" Value="All"></asp:ListItem>
+    <asp:ListItem Text="Load Permanent Employees" Value="Permanent"></asp:ListItem>
+    <asp:ListItem Text="Load Contract Employees" Value="Contract"></asp:ListItem>
+</asp:RadioButtonList>
+<asp:GridView ID="GridView4" runat="server" BackColor="White" BorderColor="#E7E7FF" BorderStyle="None" BorderWidth="1px" CellPadding="3" GridLines="Horizontal">
+    <AlternatingRowStyle BackColor="#F7F7F7" />
+    <FooterStyle BackColor="#B5C7DE" ForeColor="#4A3C8C" />
+    <HeaderStyle BackColor="#4A3C8C" Font-Bold="True" ForeColor="#F7F7F7" />
+    <PagerStyle BackColor="#E7E7FF" ForeColor="#4A3C8C" HorizontalAlign="Right" />
+    <RowStyle BackColor="#E7E7FF" ForeColor="#4A3C8C" />
+    <SelectedRowStyle BackColor="#738A9C" Font-Bold="True" ForeColor="#F7F7F7" />
+    <SortedAscendingCellStyle BackColor="#F4F4FD" />
+    <SortedAscendingHeaderStyle BackColor="#5A4C9D" />
+    <SortedDescendingCellStyle BackColor="#D8D8F0" />
+    <SortedDescendingHeaderStyle BackColor="#3E3277" />
+</asp:GridView>
+</div>
+        <asp:Button ID="btnAddEmp" runat="server" OnClick="btnAddEmp_Click" Text="AddEmployee" />
+        <asp:Button ID="btnCompQuery" runat="server" OnClick="btnCompQuery_Click" Text="Compiled Query" />
+        <asp:Button ID="btnDireQuery" runat="server" OnClick="btnDirect_Click" Text="DirectExecuteQuery" />
+        <asp:Button ID="btnExecute" runat="server" OnClick="btnExecute_Click" Text="ExecuteComand" />
+        <asp:Button ID="btnCache" runat="server" OnClick="btnCache_Click" Text="Cache" />
     </form>
 </body>
 </html>

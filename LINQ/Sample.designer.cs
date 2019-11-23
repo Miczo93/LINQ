@@ -33,6 +33,9 @@ namespace LINQ
     partial void InsertDepartmentsLINQ(DepartmentsLINQ instance);
     partial void UpdateDepartmentsLINQ(DepartmentsLINQ instance);
     partial void DeleteDepartmentsLINQ(DepartmentsLINQ instance);
+    partial void InsertEmployees2LINQ(Employees2LINQ instance);
+    partial void UpdateEmployees2LINQ(Employees2LINQ instance);
+    partial void DeleteEmployees2LINQ(Employees2LINQ instance);
     #endregion
 		
 		public SampleDataContext() : 
@@ -78,6 +81,14 @@ namespace LINQ
 			get
 			{
 				return this.GetTable<EmployeesLINQ>();
+			}
+		}
+		
+		public System.Data.Linq.Table<Employees2LINQ> Employees2LINQ
+		{
+			get
+			{
+				return this.GetTable<Employees2LINQ>();
 			}
 		}
 		
@@ -490,6 +501,244 @@ namespace LINQ
 			if ((this.PropertyChanged != null))
 			{
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Employees2LINQ")]
+	[global::System.Data.Linq.Mapping.InheritanceMappingAttribute(Code="PermanentEmployee", Type=typeof(PermanentEmployee))]
+	[global::System.Data.Linq.Mapping.InheritanceMappingAttribute(Code="ContractEmployee", Type=typeof(ContractEmployee), IsDefault=true)]
+	public abstract partial class Employees2LINQ : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _ID;
+		
+		private string _Name;
+		
+		private string _Gender;
+		
+		private string _Discriminator;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIDChanging(int value);
+    partial void OnIDChanged();
+    partial void OnNameChanging(string value);
+    partial void OnNameChanged();
+    partial void OnGenderChanging(string value);
+    partial void OnGenderChanged();
+    partial void OnDiscriminatorChanging(string value);
+    partial void OnDiscriminatorChanged();
+    #endregion
+		
+		public Employees2LINQ()
+		{
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int ID
+		{
+			get
+			{
+				return this._ID;
+			}
+			set
+			{
+				if ((this._ID != value))
+				{
+					this.OnIDChanging(value);
+					this.SendPropertyChanging();
+					this._ID = value;
+					this.SendPropertyChanged("ID");
+					this.OnIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Name", DbType="NVarChar(50)")]
+		public string Name
+		{
+			get
+			{
+				return this._Name;
+			}
+			set
+			{
+				if ((this._Name != value))
+				{
+					this.OnNameChanging(value);
+					this.SendPropertyChanging();
+					this._Name = value;
+					this.SendPropertyChanged("Name");
+					this.OnNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Gender", DbType="NVarChar(50)")]
+		public string Gender
+		{
+			get
+			{
+				return this._Gender;
+			}
+			set
+			{
+				if ((this._Gender != value))
+				{
+					this.OnGenderChanging(value);
+					this.SendPropertyChanging();
+					this._Gender = value;
+					this.SendPropertyChanged("Gender");
+					this.OnGenderChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Discriminator", DbType="NVarChar(50)", IsDiscriminator=true)]
+		public string Discriminator
+		{
+			get
+			{
+				return this._Discriminator;
+			}
+			set
+			{
+				if ((this._Discriminator != value))
+				{
+					this.OnDiscriminatorChanging(value);
+					this.SendPropertyChanging();
+					this._Discriminator = value;
+					this.SendPropertyChanged("Discriminator");
+					this.OnDiscriminatorChanged();
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	public partial class PermanentEmployee : Employees2LINQ
+	{
+		
+		private System.Nullable<int> _AnuualSalary;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnAnuualSalaryChanging(System.Nullable<int> value);
+    partial void OnAnuualSalaryChanged();
+    #endregion
+		
+		public PermanentEmployee()
+		{
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AnuualSalary", DbType="Int")]
+		public System.Nullable<int> AnuualSalary
+		{
+			get
+			{
+				return this._AnuualSalary;
+			}
+			set
+			{
+				if ((this._AnuualSalary != value))
+				{
+					this.OnAnuualSalaryChanging(value);
+					this.SendPropertyChanging();
+					this._AnuualSalary = value;
+					this.SendPropertyChanged("AnuualSalary");
+					this.OnAnuualSalaryChanged();
+				}
+			}
+		}
+	}
+	
+	public partial class ContractEmployee : Employees2LINQ
+	{
+		
+		private System.Nullable<int> _HourlyPay;
+		
+		private System.Nullable<int> _HoursWorked;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnHourlyPayChanging(System.Nullable<int> value);
+    partial void OnHourlyPayChanged();
+    partial void OnHoursWorkedChanging(System.Nullable<int> value);
+    partial void OnHoursWorkedChanged();
+    #endregion
+		
+		public ContractEmployee()
+		{
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_HourlyPay", DbType="Int")]
+		public System.Nullable<int> HourlyPay
+		{
+			get
+			{
+				return this._HourlyPay;
+			}
+			set
+			{
+				if ((this._HourlyPay != value))
+				{
+					this.OnHourlyPayChanging(value);
+					this.SendPropertyChanging();
+					this._HourlyPay = value;
+					this.SendPropertyChanged("HourlyPay");
+					this.OnHourlyPayChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_HoursWorked", DbType="Int")]
+		public System.Nullable<int> HoursWorked
+		{
+			get
+			{
+				return this._HoursWorked;
+			}
+			set
+			{
+				if ((this._HoursWorked != value))
+				{
+					this.OnHoursWorkedChanging(value);
+					this.SendPropertyChanging();
+					this._HoursWorked = value;
+					this.SendPropertyChanged("HoursWorked");
+					this.OnHoursWorkedChanged();
+				}
 			}
 		}
 	}

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
 using System.Data.Linq;
+using System.Data;
+using System.Collections.Generic;
 
 namespace LINQ
 {
@@ -162,6 +164,155 @@ namespace LINQ
         {
             GetDataEagerLoading(2);
         }
+
+        protected void RadioButtonList1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            using (SampleDataContext dbContext = new SampleDataContext())
+            {
+                dbContext.Log = Response.Output;
+
+                switch (RadioButtonList1.SelectedValue)
+                {
+                    case "Permanent":
+                        GridView1.DataSource = dbContext.Employees2LINQ.OfType<PermanentEmployee>().ToList();
+                        GridView1.DataBind();
+                        break;
+                    case "Contract":
+                        GridView1.DataSource = dbContext.Employees2LINQ.OfType<ContractEmployee>().ToList();
+                        GridView1.DataBind();
+                        break;
+                    case "All":
+                        GridView1.DataSource = ConvertEmployeesForDisplay(dbContext.Employees2LINQ.ToList());
+                        GridView1.DataBind();
+                        break;
+                    default:
+                        //Employees2LINQ jest abstrakt
+                        GridView1.DataSource = dbContext.Employees2LINQ.ToList();
+                        GridView1.DataBind();
+                        break;
+                }
+            }
+        }
+
+
+        private DataTable ConvertEmployeesForDisplay(List<Employees2LINQ> employees)
+        {
+            DataTable dt = new DataTable();
+            dt.Columns.Add("ID");
+            dt.Columns.Add("Name");
+            dt.Columns.Add("Gender");
+            dt.Columns.Add("AnuualSalary");
+            dt.Columns.Add("HourlyPay");
+            dt.Columns.Add("HoursWorked");
+            dt.Columns.Add("Type");
+
+            foreach (Employees2LINQ employee in employees)
+            {
+                DataRow dr = dt.NewRow();
+                dr["ID"] = employee.ID;
+                dr["Name"] = employee.Name;
+                dr["Gender"] = employee.Gender;
+
+                if (employee is PermanentEmployee)
+                {
+                    dr["AnuualSalary"] = ((PermanentEmployee)employee).AnuualSalary;
+                    dr["Type"] = "Permanent";
+                }
+                else
+                {
+                    dr["HourlyPay"] = ((ContractEmployee)employee).HourlyPay;
+                    dr["HoursWorked"] = ((ContractEmployee)employee).HoursWorked;
+                    dr["Type"] = "Contract";
+                }
+                dt.Rows.Add(dr);
+            }
+
+            return dt;
+        }
+
+        protected void btnAddEmp_Click(object sender, EventArgs e)
+        {
+            using (SampleDataContext dbContext = new SampleDataContext())
+            {
+                PermanentEmployee permanentEmployee = new PermanentEmployee
+                {
+                    Name = "Emma",
+                    Gender = "Female",
+                    AnuualSalary = 65000
+                };
+
+                ContractEmployee contractEmployee = new ContractEmployee
+                {
+                    Name = "Kristie",
+                    Gender = "Female",
+                    HourlyPay = 50,
+                    HoursWorked = 80
+                };
+                dbContext.Employees2LINQ.InsertOnSubmit(permanentEmployee);
+                dbContext.Employees2LINQ.InsertOnSubmit(contractEmployee);
+                dbContext.SubmitChanges();
+            }
+        }
+
+        protected void btnCompQuery_Click(object sender, EventArgs e)
+        {
+            //Compiled Query, szybsze
+            var compliedQuery = CompiledQuery.Compile(
+                (SampleDataContext dataContext, int EmpID) =>
+               (from s in dataContext.EmployeesLINQ
+                where s.ID == EmpID
+                select s).Single());
+            using (SampleDataContext dbContext = new SampleDataContext())
+            {
+                EmployeesLINQ emp = compliedQuery(dbContext, 1);
+                Response.Write("<script>alert('Employee with ID 1 is "+emp.FirstName+"')</script>");
+            } 
+        }
+
+        protected void btnDirect_Click(object sender, EventArgs e)
+        {
+            using (SampleDataContext dbContext = new SampleDataContext())
+            {
+                IEnumerable<EmployeesLINQ> emp = dbContext.ExecuteQuery<EmployeesLINQ>("Select * from EmployeesLINQ where ID ={0}",2);
+
+                foreach(EmployeesLINQ em in emp)
+                {
+                    Response.Write("<script>alert('Employee with ID 2 is " + em.FirstName + "')</script>");
+                }
+            }
+        }
+
+        protected void btnExecute_Click(object sender, EventArgs e)
+        {
+            //nie używamy
+            using (SampleDataContext dbContext = new SampleDataContext())
+            {
+                int count = dbContext.ExecuteCommand("Update EmployeesLINQ set FirstName='Jack' where ID=100");
+                Response.Write("<script>alert('Wykonano na " + count + " rekordach.')</script>");
+            }
+        }
+
+        protected void btnCache_Click(object sender, EventArgs e)
+        {
+            using (SampleDataContext dbContext1 = new SampleDataContext())
+            {
+                using (SampleDataContext dbContext2 = new SampleDataContext())
+                {
+                    EmployeesLINQ E1 = dbContext1.EmployeesLINQ.FirstOrDefault(x => x.ID == 1);
+                    EmployeesLINQ E2 = dbContext2.EmployeesLINQ.FirstOrDefault(x => x.ID == 1);
+                    Response.Write("<script>alert('E1 name " + E1.FirstName + " E2 name " + E2.FirstName + "')</script>");
+                    E1.FirstName = "Steve";
+                    dbContext1.SubmitChanges();
+                    Response.Write("<script>alert('Zmiana imienia')</script>");
+                    E2 = dbContext2.EmployeesLINQ.FirstOrDefault(x => x.ID == 1);
+                    Response.Write("<script>alert('E1 name " + E1.FirstName +" E2 name "+ E2.FirstName + "')</script>");
+                    dbContext2.Refresh(RefreshMode.OverwriteCurrentValues, E2);
+                    Response.Write("<script>alert('Reload cachu')</script>");
+                    Response.Write("<script>alert('E1 name " + E1.FirstName + " E2 name " + E2.FirstName + "')</script>");
+                }
+            }
+            
+        }
     }
     #region SQL
     /*
@@ -259,6 +410,25 @@ namespace LINQ
              where DepartmentId = @DepartmentId
 
         End
+    Create Table Employees2LINQ
+    (
+         ID int primary key identity,
+         Name nvarchar(50),
+         Gender nvarchar(50),
+         AnuualSalary int,
+         HourlyPay int,
+         HoursWorked int,
+         Discriminator nvarchar(50)
+    )
+    GO
+
+    Insert into Employees2LINQ values ('Mark', 'Male', 60000, NULL, NULL, 'PermanentEmployee')
+    Insert into Employees2LINQ values ('Steve', 'Male', NULL, 50, 160, 'ContractEmployee')
+    Insert into Employees2LINQ values ('Ben', 'Male', NULL, 40, 120, 'ContractEmployee')
+    Insert into Employees2LINQ values ('Philip', 'Male', 45000, NULL, NULL, 'PermanentEmployee')
+    Insert into Employees2LINQ values ('Mary', 'Female', 30000, NULL, NULL, 'PermanentEmployee')
+    Insert into Employees2LINQ values ('Valarie', 'Female', NULL, 30, 140, 'ContractEmployee')
+    Insert into Employees2LINQ values ('John', 'Male', 80000, NULL, NULL, 'PermanentEmployee')
     */
     #endregion
 }
